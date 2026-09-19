@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://c3mh6pfdxxhku"]
+
+[ext_resource type="Script" uid="uid://oucwhlpvwnct" path="res://virtual_joystick.gd" id="1_f8ypf"]
+
+[node name="VirtualJoystick" type="Control" unique_id=668795213]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -78.0
+offset_top = -79.0
+offset_right = -38.0
+offset_bottom = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("1_f8ypf")
+
+[node name="Base" type="Sprite2D" parent="." unique_id=1286575161]
+
+[node name="Tip" type="Sprite2D" parent="." unique_id=1159665069]

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dt2klpnwxfiut" path="res://assets/player/Knight/Left/spr_knight_attack1_left.png" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://c42foq7xxr383" path="res://assets/player/Knight/Left/spr_knight_idle_left.png" id="3_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://dd2l0akdb77eg" path="res://assets/player/Knight/Right/spr_knigh_run_right.png" id="4_dqkch"]
+[ext_resource type="PackedScene" uid="uid://c8ekopjhdehjc" path="res://scenes/ui.tscn" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
 atlas = ExtResource("2_dqkch")
@@ -155,6 +156,7 @@ animations = [{
 script = ExtResource("1_3vyb7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1906597328]
+position = Vector2(-1, -1)
 sprite_frames = SubResource("SpriteFrames_exaw7")
 animation = &"walk"
 autoplay = "idle"
@@ -165,3 +167,5 @@ shape = SubResource("CapsuleShape2D_hddda")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1914110241]
 zoom = Vector2(2, 2)
+
+[node name="UI" parent="." unique_id=167380357 instance=ExtResource("5_qlg0r")]

@@ -39,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://bo3lnrcemggxp" path="res://assets/dungeon/tiles/Structures/Walls/tile_wall.png" id="36_1x3ys"]
 [ext_resource type="Texture2D" uid="uid://ufmlgttlo2uc" path="res://assets/dungeon/tiles/Structures/AutoTile/tile_wall_autotile.png" id="37_5cy4v"]
 [ext_resource type="PackedScene" uid="uid://b4vimpmksh6y8" path="res://scenes/player.tscn" id="38_hpj8l"]
+[ext_resource type="PackedScene" uid="uid://c8ekopjhdehjc" path="res://scenes/ui.tscn" id="40_k5ck4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8nqd3"]
 texture = ExtResource("1_t7kom")
@@ -3464,3 +3465,6 @@ tile_set = SubResource("TileSet_8w4d7")
 tile_set = SubResource("TileSet_qu45a")
 
 [node name="Player" parent="." unique_id=1359231054 instance=ExtResource("38_hpj8l")]
+position = Vector2(2, -13)
+
+[node name="UI" parent="." unique_id=167380357 instance=ExtResource("40_k5ck4")]
