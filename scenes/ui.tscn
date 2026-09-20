@@ -8,13 +8,12 @@
 
 [node name="UI" type="CanvasLayer" unique_id=2035184746]
 
-[node name="VirtualJoystick" parent="." unique_id=668795213 instance=ExtResource("1_nt7q6")]
-
 [node name="HeartContainer" type="HBoxContainer" parent="." unique_id=1806392756]
 offset_left = 6.0
 offset_top = 5.0
-offset_right = 46.0
-offset_bottom = 45.0
+offset_right = 85.0
+offset_bottom = 29.5
+scale = Vector2(2, 2)
 script = ExtResource("2_wm3ai")
 full_heart_tex = ExtResource("3_8dubc")
 half_heart_tex = ExtResource("4_p7vwb")
@@ -25,6 +24,10 @@ modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
+[node name="VirtualJoystick" parent="." unique_id=668795213 instance=ExtResource("1_nt7q6")]
