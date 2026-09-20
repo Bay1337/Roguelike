@@ -1,9 +1,13 @@
 [gd_scene format=3 uid="uid://q886x25o4yxw"]
 
 [ext_resource type="Texture2D" uid="uid://bvnbt1d61k81g" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Orc/Orc/Orc-Attack01.png" id="1_hu8b3"]
-[ext_resource type="Script" uid="uid://cmbtg1ceb20ms" path="res://scenes/orc.gd" id="1_s5mlm"]
+[ext_resource type="Script" uid="uid://cmbtg1ceb20ms" path="res://scripts/orc.gd" id="1_s5mlm"]
 [ext_resource type="Texture2D" uid="uid://bvjmlo28ehg3e" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Orc/Orc/Orc-Idle.png" id="2_s5mlm"]
 [ext_resource type="Texture2D" uid="uid://pq6jnxopp6fx" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Orc/Orc/Orc-Walk.png" id="3_nvs4g"]
+[ext_resource type="Texture2D" uid="uid://dh06jqi0dg1i8" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Orc/Orc/Orc-Death.png" id="3_xme4o"]
+[ext_resource type="Texture2D" uid="uid://bmcukm5kg2xqx" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Orc/Orc/Orc-Hurt.png" id="4_nvs4g"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xme4o"]
 atlas = ExtResource("1_hu8b3")
@@ -28,6 +32,38 @@ region = Rect2(400, 0, 100, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dg8k4"]
 atlas = ExtResource("1_hu8b3")
 region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iwsbt"]
+atlas = ExtResource("3_xme4o")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5rwe6"]
+atlas = ExtResource("3_xme4o")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rodul"]
+atlas = ExtResource("3_xme4o")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e3rbj"]
+atlas = ExtResource("3_xme4o")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81lim"]
+atlas = ExtResource("4_nvs4g")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m770b"]
+atlas = ExtResource("4_nvs4g")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5i15x"]
+atlas = ExtResource("4_nvs4g")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qsyu7"]
+atlas = ExtResource("4_nvs4g")
+region = Rect2(300, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ivc2h"]
 atlas = ExtResource("2_s5mlm")
@@ -112,6 +148,40 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_iwsbt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5rwe6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rodul")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e3rbj")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_81lim")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m770b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5i15x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qsyu7")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ivc2h")
 }, {
 "duration": 1.0,
@@ -170,16 +240,18 @@ radius = 6.0827627
 radius = 61.81424
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6qx4q"]
-radius = 8.246211
+radius = 15.033297
 
 [node name="Orc" type="CharacterBody2D" unique_id=805435081]
+collision_layer = 16
 script = ExtResource("1_s5mlm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=351845632]
+material = SubResource("CanvasItemMaterial_qlg0r")
 sprite_frames = SubResource("SpriteFrames_gyc6d")
 animation = &"attack"
 autoplay = "idle"
-frame_progress = 0.8038708
+frame_progress = 0.5625099
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=191258240]
 visible = false
@@ -187,16 +259,18 @@ shape = SubResource("CircleShape2D_g7b7a")
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=42808070]
 visible = false
+collision_layer = 0
+collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1174914110]
 shape = SubResource("CircleShape2D_gyc6d")
 
-[node name="HitboxPivot" type="Node2D" parent="." unique_id=315536636]
+[node name="Hitbox" type="Area2D" parent="." unique_id=323733967]
+position = Vector2(11, -3)
+collision_layer = 4
+collision_mask = 3
 
-[node name="Hitbox" type="Area2D" parent="HitboxPivot" unique_id=323733967]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxPivot/Hitbox" unique_id=223080087]
-position = Vector2(16, 3)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=223080087]
 shape = SubResource("CircleShape2D_6qx4q")
 
-[connection signal="body_entered" from="HitboxPivot/Hitbox" to="." method="_on_hitbox_body_entered"]
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
