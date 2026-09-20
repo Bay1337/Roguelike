@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b1brs4gj8mcr7" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://dlv2lbvu7hyc2" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Attack01.png" id="2_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://6frw81vd7olu" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Death.png" id="3_fjrip"]
 [ext_resource type="Texture2D" uid="uid://di6fchgolqc3j" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Idle.png" id="3_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://cok4jrm25kixe" path="res://assets/Grey Pack/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Swordsman/Swordsman/Swordsman-Walk.png" id="4_fjrip"]
 [ext_resource type="PackedScene" uid="uid://c8ekopjhdehjc" path="res://scenes/ui.tscn" id="5_qlg0r"]
@@ -33,6 +34,22 @@ region = Rect2(500, 0, 100, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1ej7"]
 atlas = ExtResource("2_qlg0r")
 region = Rect2(600, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dt7fs"]
+atlas = ExtResource("3_fjrip")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wqfne"]
+atlas = ExtResource("3_fjrip")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wnwbv"]
+atlas = ExtResource("3_fjrip")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gl8cc"]
+atlas = ExtResource("3_fjrip")
+region = Rect2(300, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oprun"]
 atlas = ExtResource("3_tuyoq")
@@ -120,6 +137,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_dt7fs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wqfne")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wnwbv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gl8cc")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_oprun")
 }, {
 "duration": 1.0,
@@ -186,10 +220,8 @@ script = ExtResource("1_3vyb7")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1906597328]
 position = Vector2(-1, -5)
 sprite_frames = SubResource("SpriteFrames_exaw7")
-animation = &"attack"
+animation = &"death"
 autoplay = "idle"
-frame = 6
-frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1683848790]
 position = Vector2(-1, -1)
@@ -213,6 +245,7 @@ shape = SubResource("CircleShape2D_hddda")
 [node name="Hurtbox" type="Area2D" parent="." unique_id=229564698 groups=["player_hurtbox"]]
 position = Vector2(1, -6)
 collision_layer = 2
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=641613587]
 shape = SubResource("CircleShape2D_exaw7")

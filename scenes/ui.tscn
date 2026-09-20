@@ -1,7 +1,30 @@
 [gd_scene format=3 uid="uid://c8ekopjhdehjc"]
 
 [ext_resource type="PackedScene" uid="uid://c3mh6pfdxxhku" path="res://scenes/virtual_joystick.tscn" id="1_nt7q6"]
+[ext_resource type="Script" uid="uid://dmlys2jeponka" path="res://heart_container.gd" id="2_wm3ai"]
+[ext_resource type="Texture2D" uid="uid://wq5hkan4bb2x" path="res://assets/Hearts/Full.png" id="3_8dubc"]
+[ext_resource type="Texture2D" uid="uid://cb7uadj3jegxd" path="res://assets/Hearts/Half.png" id="4_p7vwb"]
+[ext_resource type="Texture2D" uid="uid://cgsq3pfs44taa" path="res://assets/Hearts/Empty.png" id="5_ktti3"]
 
-[node name="UI" type="CanvasLayer" unique_id=167380357]
+[node name="UI" type="CanvasLayer" unique_id=2035184746]
 
 [node name="VirtualJoystick" parent="." unique_id=668795213 instance=ExtResource("1_nt7q6")]
+
+[node name="HeartContainer" type="HBoxContainer" parent="." unique_id=1806392756]
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 46.0
+offset_bottom = 45.0
+script = ExtResource("2_wm3ai")
+full_heart_tex = ExtResource("3_8dubc")
+half_heart_tex = ExtResource("4_p7vwb")
+empty_heart_tex = ExtResource("5_ktti3")
+
+[node name="FadeOverlay" type="ColorRect" parent="." unique_id=1288485292 groups=["fade_screen"]]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

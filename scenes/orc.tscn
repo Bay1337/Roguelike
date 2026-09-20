@@ -265,12 +265,21 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1174914110]
 shape = SubResource("CircleShape2D_gyc6d")
 
-[node name="Hitbox" type="Area2D" parent="." unique_id=323733967]
+[node name="HitboxRight" type="Area2D" parent="." unique_id=323733967]
 position = Vector2(11, -3)
 collision_layer = 4
-collision_mask = 3
+collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=223080087]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxRight" unique_id=223080087]
 shape = SubResource("CircleShape2D_6qx4q")
 
-[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[node name="HitboxLeft" type="Area2D" parent="." unique_id=1938876895]
+position = Vector2(-11, -2)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxLeft" unique_id=1787168665]
+shape = SubResource("CircleShape2D_6qx4q")
+
+[connection signal="area_entered" from="HitboxRight" to="." method="_on_hitbox_right_area_entered"]
+[connection signal="area_entered" from="HitboxLeft" to="." method="_on_hitbox_left_area_entered"]
