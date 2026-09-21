@@ -21,6 +21,14 @@ king_tex = ExtResource("7_4cbqt")
 white_tile_tex = ExtResource("8_ly4ky")
 dark_tile_tex = ExtResource("9_gclsv")
 
+[node name="DungeonDimOverlay" type="ColorRect" parent="." unique_id=1081698056]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07058824, 0.05490196, 0.039215688, 0.58431375)
+
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=753044593]
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,7 +37,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ChessBoardVisual" type="TextureRect" parent="CenterContainer" unique_id=819242326]
-custom_minimum_size = Vector2(1280, 1536)
+custom_minimum_size = Vector2(960, 960)
 layout_mode = 2
 
 [node name="ChessGrid" type="Control" parent="CenterContainer/ChessBoardVisual" unique_id=1563101904]

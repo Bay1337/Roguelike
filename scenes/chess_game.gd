@@ -40,10 +40,12 @@ var black_h_rook_moved: bool = false
 const PIECE_VALUES = { 0: 0, 1: 10, 2: 30, 3: 30, 4: 50, 5: 90, 6: 9000 }
 var piece_textures: Dictionary = {}
 
-# DIMENSIONS EXPANDED FOR AN 8.0x SCALING PASS (PERFECT FOR MOBILE TOUCH)
-const TILE_SIZE: float = 128.0       # 16 pixels * 8 = 128.0
-const BOARD_OFFSET_X: float = 128.0  # 16 pixels * 8 = 128.0
-const BOARD_OFFSET_Y: float = 256.0 # 32 pixels * 8 = 256.0
+# PERSPECTIVE OVERRIDE: Separate width and height dimensions to respect the 16x12 aspect ratio
+const TILE_WIDTH: float = 96.0       # 16 pixels * 6x crisp scale
+const TILE_HEIGHT: float = 72.0      # 12 pixels * 6x crisp scale
+
+const BOARD_OFFSET_X: float = 96.0   # Adjust to match your board asset margins
+const BOARD_OFFSET_Y: float = 144.0  # 24 pixels * 6x scale to align with the back stone stairs
 
 
 func _ready() -> void:
@@ -68,32 +70,40 @@ func initialize_logical_matrix() -> void:
 func generate_visual_grid_buttons() -> void:
 	for child in chess_grid.get_children(): child.queue_free()
 	
+	# LAYER 1: Draw the Board Borders Background first if it exists
 	if board_border_tex:
 		var border_rect = TextureRect.new()
 		border_rect.texture = board_border_tex
 		border_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		border_rect.size = Vector2((TILE_SIZE * 8) + (BOARD_OFFSET_X * 2), (TILE_SIZE * 8) + (BOARD_OFFSET_Y * 2))
+		# Dynamically adapt border scale to match squash math profiles
+		border_rect.size = Vector2((TILE_WIDTH * 8) + (BOARD_OFFSET_X * 2), (TILE_HEIGHT * 8) + (BOARD_OFFSET_Y * 2))
 		border_rect.position = Vector2.ZERO
 		border_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		chess_grid.add_child(border_rect)
 	
+	# LAYER 2: Draw the Board Floor Tiles (Your custom 16x12 layout)
 	for y in range(8):
 		for x in range(8):
-			var tile_pos = Vector2(BOARD_OFFSET_X + (x * TILE_SIZE), BOARD_OFFSET_Y + (y * TILE_SIZE))
+			var tile_pos = Vector2(BOARD_OFFSET_X + (x * TILE_WIDTH), BOARD_OFFSET_Y + (y * TILE_HEIGHT))
 			var tile_sprite = TextureRect.new()
 			tile_sprite.texture = white_tile_tex if (x + y) % 2 == 0 else dark_tile_tex
 			tile_sprite.position = tile_pos
-			tile_sprite.size = Vector2(TILE_SIZE, TILE_SIZE)
+			tile_sprite.size = Vector2(TILE_WIDTH, TILE_HEIGHT) # Sets the tile to a 3D perspective rectangle
 			tile_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			tile_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			
+			if (x + y) % 2 == 0:
+				tile_sprite.modulate = Color("#f4eacc") # Warm Beige Tint
+				
 			chess_grid.add_child(tile_sprite)
 			
+	# LAYER 3: Draw Interactive Flat Selection Panels
 	for y in range(8):
 		for x in range(8):
-			var tile_pos = Vector2(BOARD_OFFSET_X + (x * TILE_SIZE), BOARD_OFFSET_Y + (y * TILE_SIZE))
+			var tile_pos = Vector2(BOARD_OFFSET_X + (x * TILE_WIDTH), BOARD_OFFSET_Y + (y * TILE_HEIGHT))
 			var btn = Button.new()
 			btn.position = tile_pos
-			btn.size = Vector2(TILE_SIZE, TILE_SIZE)
+			btn.size = Vector2(TILE_WIDTH, TILE_HEIGHT) # Matches mouse clicks to squash rectangles
 			
 			var is_legal: bool = false
 			if selected_tile != Vector2(-1, -1) and not game_over:
@@ -105,20 +115,26 @@ func generate_visual_grid_buttons() -> void:
 			btn.pressed.connect(_on_tile_clicked.bind(Vector2(x, y)))
 			chess_grid.add_child(btn)
 
+	# LAYER 4: Draw Overlapping Pieces (Preserving tall proportions)
 	for y in range(8):
 		for x in range(8):
 			var pid = board_state[y][x]
 			if pid == 0: continue
-			var piece_pos = Vector2(BOARD_OFFSET_X + (x * TILE_SIZE), BOARD_OFFSET_Y + (y * TILE_SIZE))
+			
+			var piece_pos = Vector2(BOARD_OFFSET_X + (x * TILE_WIDTH), BOARD_OFFSET_Y + (y * TILE_HEIGHT))
 			var img = TextureRect.new()
 			img.texture = piece_textures[abs(pid)]
 			img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			img.size = Vector2(TILE_SIZE, TILE_SIZE * 1.5)
-			img.position = piece_pos - Vector2(0, TILE_SIZE * 0.5)
+			
+			# FIX: Keep pieces matching the width of the squares, but draw them taller 
+			# so they stick out of their slots and overlap the rows behind them!
+			img.size = Vector2(TILE_WIDTH, TILE_WIDTH * 1.5) 
+			img.position = piece_pos - Vector2(0, (TILE_WIDTH * 1.5) - TILE_HEIGHT) 
 			img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			img.modulate = Color("#f4eacc") if pid > 0 else Color("#ff4a4a")
 			chess_grid.add_child(img)
+
 
 func _on_tile_clicked(coords: Vector2) -> void:
 	if active_turn != "player" or game_over: return

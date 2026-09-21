@@ -56,8 +56,9 @@ func open_chess_mini_game() -> void:
 	active_game_instance = chess_scene.instantiate()
 	get_tree().root.add_child(active_game_instance)
 	
-	# Watch the mini-game node exit state so we know exactly when to unfreeze your player
-	active_game_instance.tree_exited.connect(_on_chess_game_closed)
+	# FIX: Use tree_exiting so the global game tree remains safely accessible!
+	active_game_instance.tree_exiting.connect(_on_chess_game_closed)
+
 
 
 func _on_chess_game_closed() -> void:
