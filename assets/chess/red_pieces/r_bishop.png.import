@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dec4hifsmupya"
-path="res://.godot/imported/textured_light.png-bb284d6b64ebf2f4a1207dd564065ec0.ctex"
+uid="uid://b84k3622o55wt"
+path="res://.godot/imported/r_bishop.png-38c7eb1c29592896f879ba2d1631b254.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/chess/pixel_chess_textures/textures/textured_light.png"
-dest_files=["res://.godot/imported/textured_light.png-bb284d6b64ebf2f4a1207dd564065ec0.ctex"]
+source_file="res://assets/chess/red_pieces/r_bishop.png"
+dest_files=["res://.godot/imported/r_bishop.png-38c7eb1c29592896f879ba2d1631b254.ctex"]
 
 [params]
 

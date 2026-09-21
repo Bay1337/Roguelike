@@ -21,6 +21,7 @@ var current_health: float
 var player: Node2D = null
 var cooldown_timer: float = 0.0
 var damage_window_active: bool = false
+var knockback_velocity: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -53,6 +54,9 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	# Smoothly friction-decay the knockback velocity back down to zero over time
+	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 800.0 * delta)
+
 	if cooldown_timer > 0.0:
 		cooldown_timer -= delta
 
@@ -84,6 +88,8 @@ func _physics_process(delta: float) -> void:
 			if cooldown_timer <= 0.0:
 				fire_weapon_swing()
 
+	# Combine the enemy's intentional movement velocity with the external knockback push
+	velocity += knockback_velocity
 	move_and_slide()
 
 
@@ -94,13 +100,13 @@ func fire_weapon_swing() -> void:
 	damage_window_active = true
 	
 	var active_collision = hitbox_left_collision if sprite.flip_h else hitbox_right_collision
-	active_collision.disabled = false
+	active_collision.set_deferred("disabled", false)
 	
 	await get_tree().create_timer(0.2).timeout
 	
 	damage_window_active = false
-	hitbox_right_collision.disabled = true
-	hitbox_left_collision.disabled = true
+	hitbox_right_collision.set_deferred("disabled", true)
+	hitbox_left_collision.set_deferred("disabled", true)
 	
 	if state == State.CHASE and sprite.animation == "attack":
 		sprite.play("walk")
@@ -112,8 +118,12 @@ func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO) -> void:
 	print("Orc hit! Health remaining: ", current_health)
 	
 	damage_window_active = false
-	hitbox_right_collision.disabled = true
-	hitbox_left_collision.disabled = true
+	
+	# FIXED: Assign the incoming parameter directly to our active movement vector!
+	knockback_velocity = knockback
+	
+	hitbox_right_collision.set_deferred("disabled", true)
+	hitbox_left_collision.set_deferred("disabled", true)
 	
 	if current_health <= 0:
 		die()

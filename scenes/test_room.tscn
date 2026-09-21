@@ -39,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://bo3lnrcemggxp" path="res://assets/dungeon/tiles/Structures/Walls/tile_wall.png" id="36_1x3ys"]
 [ext_resource type="Texture2D" uid="uid://ufmlgttlo2uc" path="res://assets/dungeon/tiles/Structures/AutoTile/tile_wall_autotile.png" id="37_5cy4v"]
 [ext_resource type="PackedScene" uid="uid://b4vimpmksh6y8" path="res://scenes/player.tscn" id="38_hpj8l"]
+[ext_resource type="PackedScene" uid="uid://t1advqrvhje8" path="res://scenes/chess_table.tscn" id="41_h1vtn"]
 [ext_resource type="PackedScene" uid="uid://q886x25o4yxw" path="res://scenes/orc.tscn" id="41_x7vqm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8nqd3"]
@@ -4340,6 +4341,11 @@ tile_set = SubResource("TileSet_qu45a")
 
 [node name="Player" parent="." unique_id=1359231054 instance=ExtResource("38_hpj8l")]
 position = Vector2(2, -13)
+max_health = 20.0
 
 [node name="Orc" parent="." unique_id=805435081 instance=ExtResource("41_x7vqm")]
 position = Vector2(55, -148)
+max_health = 50.0
+
+[node name="ChessTable" parent="." unique_id=697097404 instance=ExtResource("41_h1vtn")]
+position = Vector2(-94, -270)

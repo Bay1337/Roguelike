@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://b43ksix600077"]
+
+[ext_resource type="Script" uid="uid://chps77qyktafo" path="res://scenes/chess_game.gd" id="1_wnm4a"]
+[ext_resource type="Texture2D" uid="uid://bmuvmwgy0c68e" path="res://assets/chess/white_pieces/w_pawn.png" id="2_qi3br"]
+[ext_resource type="Texture2D" uid="uid://biheetwkjyhd7" path="res://assets/chess/white_pieces/w_knight.png" id="3_bqtgu"]
+[ext_resource type="Texture2D" uid="uid://dt4ey83ku4138" path="res://assets/chess/white_pieces/w_bishop.png" id="4_j6j8t"]
+[ext_resource type="Texture2D" uid="uid://c07w4cpoc701x" path="res://assets/chess/white_pieces/w_rook.png" id="5_ly4ky"]
+[ext_resource type="Texture2D" uid="uid://dq2hpac6rehje" path="res://assets/chess/white_pieces/w_queen.png" id="6_gclsv"]
+[ext_resource type="Texture2D" uid="uid://5ya0mkj718qq" path="res://assets/chess/white_pieces/w_king.png" id="7_4cbqt"]
+[ext_resource type="Texture2D" uid="uid://cei1j4gqnhshg" path="res://assets/chess/tiles/tilemap_crop_80_84_16x12.png" id="8_ly4ky"]
+[ext_resource type="Texture2D" uid="uid://byyk6ry2ka22t" path="res://assets/chess/tiles/tilemap_crop_48_84_16x12.png" id="9_gclsv"]
+
+[node name="ChessGame" type="CanvasLayer" unique_id=612265858]
+script = ExtResource("1_wnm4a")
+pawn_tex = ExtResource("2_qi3br")
+knight_tex = ExtResource("3_bqtgu")
+bishop_tex = ExtResource("4_j6j8t")
+rook_tex = ExtResource("5_ly4ky")
+queen_tex = ExtResource("6_gclsv")
+king_tex = ExtResource("7_4cbqt")
+white_tile_tex = ExtResource("8_ly4ky")
+dark_tile_tex = ExtResource("9_gclsv")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=753044593]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChessBoardVisual" type="TextureRect" parent="CenterContainer" unique_id=819242326]
+custom_minimum_size = Vector2(960, 1152)
+layout_mode = 2
+
+[node name="ChessGrid" type="Control" parent="CenterContainer/ChessBoardVisual" unique_id=1563101904]
+anchors_preset = 0
+offset_right = 256.0
+offset_bottom = 256.0

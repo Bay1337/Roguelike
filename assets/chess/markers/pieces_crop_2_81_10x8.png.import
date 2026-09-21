@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwdefont5x36m"
-path="res://.godot/imported/tilemap.png-91b5c35b5cab14c25e07153f4ba001cc.ctex"
+uid="uid://bjgyx1ae0cj2j"
+path="res://.godot/imported/pieces_crop_2_81_10x8.png-30be6e927c257c86c8d051a1a58bf509.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/chess/pixel_chess_textures/textures/tilemap.png"
-dest_files=["res://.godot/imported/tilemap.png-91b5c35b5cab14c25e07153f4ba001cc.ctex"]
+source_file="res://assets/chess/markers/pieces_crop_2_81_10x8.png"
+dest_files=["res://.godot/imported/pieces_crop_2_81_10x8.png-30be6e927c257c86c8d051a1a58bf509.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhlbrn6rr403m"
-path="res://.godot/imported/tacf.png-5ff90f6e0fd3ec609581cf88c09bcd73.ctex"
+uid="uid://d10saqrtnd0f7"
+path="res://.godot/imported/b_knight.png-44f66cd7829a8d31fc71b07d76b2f986.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/chess/pixel_chess_textures/tacf.png"
-dest_files=["res://.godot/imported/tacf.png-5ff90f6e0fd3ec609581cf88c09bcd73.ctex"]
+source_file="res://assets/chess/black_pieces/b_knight.png"
+dest_files=["res://.godot/imported/b_knight.png-44f66cd7829a8d31fc71b07d76b2f986.ctex"]
 
 [params]
 
