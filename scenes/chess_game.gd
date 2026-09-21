@@ -40,9 +40,11 @@ var black_h_rook_moved: bool = false
 const PIECE_VALUES = { 0: 0, 1: 10, 2: 30, 3: 30, 4: 50, 5: 90, 6: 9000 }
 var piece_textures: Dictionary = {}
 
-const TILE_SIZE: float = 96.0       
-const BOARD_OFFSET_X: float = 96.0  
-const BOARD_OFFSET_Y: float = 192.0 
+# DIMENSIONS EXPANDED FOR AN 8.0x SCALING PASS (PERFECT FOR MOBILE TOUCH)
+const TILE_SIZE: float = 128.0       # 16 pixels * 8 = 128.0
+const BOARD_OFFSET_X: float = 128.0  # 16 pixels * 8 = 128.0
+const BOARD_OFFSET_Y: float = 256.0 # 32 pixels * 8 = 256.0
+
 
 func _ready() -> void:
 	piece_textures = { 1: pawn_tex, 2: knight_tex, 3: bishop_tex, 4: rook_tex, 5: queen_tex, 6: king_tex }

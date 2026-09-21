@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://wq5hkan4bb2x" path="res://assets/Hearts/Full.png" id="3_8dubc"]
 [ext_resource type="Texture2D" uid="uid://cb7uadj3jegxd" path="res://assets/Hearts/Half.png" id="4_p7vwb"]
 [ext_resource type="Texture2D" uid="uid://cgsq3pfs44taa" path="res://assets/Hearts/Empty.png" id="5_ktti3"]
+[ext_resource type="Texture2D" uid="uid://7xtl5o85nhey" path="res://icon.svg" id="6_8dubc"]
 
 [node name="UI" type="CanvasLayer" unique_id=2035184746]
 
@@ -31,3 +32,8 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="VirtualJoystick" parent="." unique_id=668795213 instance=ExtResource("1_nt7q6")]
+
+[node name="InteractTouchButton" type="TouchScreenButton" parent="." unique_id=1443280192]
+position = Vector2(111, 1042)
+texture_normal = ExtResource("6_8dubc")
+action = "interact"
