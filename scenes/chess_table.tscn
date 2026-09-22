@@ -22,11 +22,11 @@ shape = SubResource("RectangleShape2D_2rp2k")
 
 [node name="Label" type="Label" parent="CollisionShape2D" unique_id=987995476]
 texture_filter = 1
-offset_left = 3.0
-offset_top = -25.0
-offset_right = 43.0
-offset_bottom = -16.0
-theme_override_font_sizes/font_size = 6
+offset_left = -13.0
+offset_top = -21.0
+offset_right = 93.0
+offset_bottom = 2.0
+scale = Vector2(0.25, 0.25)
 text = "[E] Play Chess"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

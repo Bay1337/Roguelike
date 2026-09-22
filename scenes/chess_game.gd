@@ -40,18 +40,28 @@ var black_h_rook_moved: bool = false
 const PIECE_VALUES = { 0: 0, 1: 10, 2: 30, 3: 30, 4: 50, 5: 90, 6: 9000 }
 var piece_textures: Dictionary = {}
 
-# PERSPECTIVE OVERRIDE: Separate width and height dimensions to respect the 16x12 aspect ratio
-const TILE_WIDTH: float = 96.0       # 16 pixels * 6x crisp scale
-const TILE_HEIGHT: float = 72.0      # 12 pixels * 6x crisp scale
+# DIMENSIONS UPDATED FOR A PURE CRISP 3.0x SCALING PASS
+const TILE_WIDTH: float = 48.0       # 16 pixels * 3 = 48.0
+const TILE_HEIGHT: float = 36.0      # 12 pixels * 3 = 36.0
 
-const BOARD_OFFSET_X: float = 96.0   # Adjust to match your board asset margins
-const BOARD_OFFSET_Y: float = 144.0  # 24 pixels * 6x scale to align with the back stone stairs
+const BOARD_OFFSET_X: float = 48.0   # 16 pixels * 3 = 48.0
+const BOARD_OFFSET_Y: float = 96.0   # 32 pixels * 3 = 96.0
+
+
 
 
 func _ready() -> void:
 	piece_textures = { 1: pawn_tex, 2: knight_tex, 3: bishop_tex, 4: rook_tex, 5: queen_tex, 6: king_tex }
+	
+	# FIX: Scales the entire chessboard visual layer crisp and sharp uniformly
+	# Increase or decrease this multiplier value (like 2.0 or 3.0) to find your perfect size!
+	var visual_board = $CenterContainer/ChessBoardVisual
+	if visual_board:
+		visual_board.scale = Vector2(2.5, 2.5) 
+		
 	initialize_logical_matrix()
 	generate_visual_grid_buttons()
+
 
 func initialize_logical_matrix() -> void:
 	# A perfect 8x8 grid matrix. 0 means an empty dungeon board square!
@@ -115,7 +125,7 @@ func generate_visual_grid_buttons() -> void:
 			btn.pressed.connect(_on_tile_clicked.bind(Vector2(x, y)))
 			chess_grid.add_child(btn)
 
-	# LAYER 4: Draw Overlapping Pieces (Preserving tall proportions)
+	# LAYER 4: Draw Overlapping Pieces (With Perfect Medium Pawn Sizing Balance!)
 	for y in range(8):
 		for x in range(8):
 			var pid = board_state[y][x]
@@ -127,13 +137,23 @@ func generate_visual_grid_buttons() -> void:
 			img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			
-			# FIX: Keep pieces matching the width of the squares, but draw them taller 
-			# so they stick out of their slots and overlap the rows behind them!
-			img.size = Vector2(TILE_WIDTH, TILE_WIDTH * 1.5) 
-			img.position = piece_pos - Vector2(0, (TILE_WIDTH * 1.5) - TILE_HEIGHT) 
+			# Check if the piece is a Pawn (ID = 1)
+			if abs(pid) == 1:
+				# PERFECT IN-BETWEEN SIZE: Taller than the squashed floor, shorter than power units!
+				img.size = Vector2(TILE_WIDTH * 0.85, TILE_HEIGHT * 1.35) 
+				# Center horizontally and offset slightly upward so the full pawn stands out on startup
+				var x_offset = (TILE_WIDTH - (TILE_WIDTH * 0.85)) / 2.0
+				var y_offset = (TILE_HEIGHT * 1.35) - TILE_HEIGHT
+				img.position = piece_pos + Vector2(x_offset, -y_offset * 0.6)
+			else:
+				# TALL POWER PIECES: Keeping their distinct grand proportions intact
+				img.size = Vector2(TILE_WIDTH, TILE_WIDTH * 1.5) 
+				img.position = piece_pos - Vector2(0, (TILE_WIDTH * 1.5) - TILE_HEIGHT) 
+				
 			img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			img.modulate = Color("#f4eacc") if pid > 0 else Color("#ff4a4a")
 			chess_grid.add_child(img)
+
 
 
 func _on_tile_clicked(coords: Vector2) -> void:
