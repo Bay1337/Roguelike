@@ -39,9 +39,10 @@
 [ext_resource type="Texture2D" uid="uid://bo3lnrcemggxp" path="res://assets/dungeon/tiles/Structures/Walls/tile_wall.png" id="36_1x3ys"]
 [ext_resource type="Texture2D" uid="uid://ufmlgttlo2uc" path="res://assets/dungeon/tiles/Structures/AutoTile/tile_wall_autotile.png" id="37_5cy4v"]
 [ext_resource type="PackedScene" uid="uid://b4vimpmksh6y8" path="res://scenes/player.tscn" id="38_hpj8l"]
+[ext_resource type="PackedScene" uid="uid://dnq1r32vq77qb" path="res://scenes/skeleton.tscn" id="41_356av"]
 [ext_resource type="PackedScene" uid="uid://t1advqrvhje8" path="res://scenes/chess_table.tscn" id="41_h1vtn"]
 [ext_resource type="PackedScene" uid="uid://q886x25o4yxw" path="res://scenes/orc.tscn" id="41_x7vqm"]
-[ext_resource type="Script" uid="uid://yarewblbbm2p" path="res://scenes/room_zone.gd" id="42_h1vtn"]
+[ext_resource type="Script" uid="uid://cd3gfaimxdjy4" path="res://scripts/room_1_zone.gd" id="43_356av"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8nqd3"]
 texture = ExtResource("1_t7kom")
@@ -4351,13 +4352,16 @@ max_health = 20.0
 position = Vector2(55, -148)
 max_health = 50.0
 
+[node name="Skeleton" parent="." unique_id=1886535496 instance=ExtResource("41_356av")]
+position = Vector2(-46, -237)
+
 [node name="ChessTable" parent="." unique_id=697097404 instance=ExtResource("41_h1vtn")]
 position = Vector2(-94, -270)
 
 [node name="Room1Zone" type="Area2D" parent="." unique_id=1304831964]
 visible = false
 position = Vector2(95, -168)
-script = ExtResource("42_h1vtn")
+script = ExtResource("43_356av")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room1Zone" unique_id=1478540217]
 shape = SubResource("RectangleShape2D_hddda")

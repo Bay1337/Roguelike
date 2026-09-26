@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Roguelike"
-run/main_scene="uid://bdgv77d542in3"
+run/main_scene="uid://ba4jjb5hhw42a"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GlobalManager="*uid://bmmfnpb4jophc"
 
 [display]
 

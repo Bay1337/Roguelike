@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://t1advqrvhje8"]
 
-[ext_resource type="Script" uid="uid://b75tntcucblpe" path="res://scenes/chess_table.gd" id="1_kutuf"]
+[ext_resource type="Script" uid="uid://b75tntcucblpe" path="res://scripts/chess_table.gd" id="1_2rp2k"]
 [ext_resource type="Texture2D" uid="uid://7xtl5o85nhey" path="res://icon.svg" id="2_2rp2k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2rp2k"]
@@ -9,7 +9,7 @@ size = Vector2(26, 28)
 [node name="ChessTable" type="Area2D" unique_id=697097404]
 collision_layer = 0
 collision_mask = 8
-script = ExtResource("1_kutuf")
+script = ExtResource("1_2rp2k")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=560055734]
 position = Vector2(-1, -1.0000019)

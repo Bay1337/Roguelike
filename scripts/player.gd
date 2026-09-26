@@ -21,15 +21,22 @@ var is_invincible: bool = false
 
 
 func _ready() -> void:
+	add_to_group("player") # <--- Keep this right at the top!
+	
+	if GlobalManager.selected_sprite_frames != null:
+		sprite.sprite_frames = GlobalManager.selected_sprite_frames
+
+	# ------------------------------
+
 	current_health = max_health
 	if attack_hitbox_collision:
 		attack_hitbox_collision.disabled = true
 	add_to_group("player")
-	
-	# Handle fading back into clarity on startup
+
 	await get_tree().physics_frame
 	sync_hud_ui()
 	execute_fade_in_effect()
+
 
 
 func _physics_process(_delta: float) -> void:
@@ -132,14 +139,14 @@ func execute_fade_out_and_restart() -> void:
 	var fade_nodes = get_tree().get_nodes_in_group("fade_screen")
 	if fade_nodes.size() > 0:
 		var target_rect = fade_nodes[0] as ColorRect
-		
-		# Create an interpolation tween animation timeline step to fade out smoothly over 1.0 second
+
 		var tween = create_tween()
 		tween.tween_property(target_rect, "modulate:a", 1.0, 1.0)
 		await tween.finished
-		
-	# Completely reload the current scene layout smoothly from scratch
+
+	# FIXED: Keeps persistent data alive while cleanly reloading the map layout
 	get_tree().reload_current_scene()
+
 
 
 func execute_fade_in_effect() -> void:
