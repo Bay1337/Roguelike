@@ -9,35 +9,45 @@ extends CharacterBody2D
 @export var speed: float = 100.0
 @export var attack_damage: float = 25.0
 @export var knockback_force: float = 200.0 
-@export var combo_reset_time: float = 2.0 
-@export var third_hit_multiplier: float = 1.75  # Deals 75% extra damage on the final hit!
+@export var combo_reset_time: float = 1.0 
+@export var third_hit_multiplier: float = 1.75
+
+# --- INPUT BUFFERING ---
+var attack_buffered: bool = false
+var buffer_window_active: bool = false
+
+# --- COMBO TRACKING ---
+var combo_step: int = 1         
+var last_attack_time: float = 0.0
 
 @onready var sprite = $AnimatedSprite2D
 @onready var attack_hitbox_collision = $AttackPivot/PlayerHitbox/CollisionShape2D
 @onready var attack_pivot = $AttackPivot
+@onready var health_bar = $PlayerHealthBar # <--- REFERENCE THE NEW GREEN BAR
 
 var is_dead: bool = false
 var current_health: float
 var is_attacking: bool = false
 var is_invincible: bool = false 
 
-# --- COMBO SYSTEM VARIABLES ---
-var combo_step: int = 1         # Tracks if we are on attack, attack2, or attack3
-var last_attack_time: float = 0.0
-
 
 func _ready() -> void:
-	add_to_group("player") # <--- Keep this right at the top!
+	add_to_group("player") 
 	
 	if GlobalManager.selected_sprite_frames != null:
 		sprite.sprite_frames = GlobalManager.selected_sprite_frames
 
 	current_health = max_health
+	
+	# Initialize the green bar to full health dynamically
+	if has_node("PlayerHealthBar"):
+		health_bar.max_value = max_health
+		health_bar.value = current_health
+
 	if attack_hitbox_collision:
 		attack_hitbox_collision.disabled = true
 
 	await get_tree().physics_frame
-	sync_hud_ui()
 	execute_fade_in_effect()
 
 
@@ -47,65 +57,58 @@ func _physics_process(_delta: float) -> void:
 		move_and_slide()
 		return
 
-	# Check if the combo timer expired and reset back to the first attack string step
 	var current_time = Time.get_ticks_msec() / 1000.0
 	if combo_step > 1 and (current_time - last_attack_time) > combo_reset_time:
 		combo_step = 1
 
-	if Input.is_action_just_pressed("attack") and not is_attacking:
-		attack()
+	if Input.is_action_just_pressed("attack"):
+		if not is_attacking:
+			attack()
+		elif buffer_window_active:
+			attack_buffered = true 
 
-	# --- MODIFIED: Prevent normal movement code from running while swinging ---
+	var input_direction = Vector2(
+		Input.get_axis("move_left", "move_right"),
+		Input.get_axis("move_up", "move_down")
+	)
+
 	if not is_attacking:
-		var input_direction = Vector2(
-			Input.get_axis("move_left", "move_right"),
-			Input.get_axis("move_up", "move_down")
-		)
 		velocity = input_direction * speed
 		move_and_slide()
 		update_animation(input_direction)
 	else:
-		# If we are dashing in attack3, keep sliding forward using the dash velocity!
-		if sprite.animation == "attack3":
-			move_and_slide()
-
+		# ALL ATTACKS WALKING BLEED
+		var attack_walk_speed_multiplier = 0.45 
+		velocity = input_direction * (speed * attack_walk_speed_multiplier)
+		move_and_slide()
+		
+		if input_direction.x > 0:
+			sprite.flip_h = false
+			attack_pivot.scale.x = 1
+		elif input_direction.x < 0:
+			sprite.flip_h = true
+			attack_pivot.scale.x = -1
 
 
 func attack() -> void:
 	if is_dead: return
 	is_attacking = true
+	attack_buffered = false
+	buffer_window_active = false
 	
-	# Determine which animation string to play based on current sequence step
 	var anim_name = "attack"
 	if combo_step == 2:
 		anim_name = "attack2"
 	elif combo_step == 3:
 		anim_name = "attack3"
 		
-	# Play the targeted action state safely
 	if sprite.sprite_frames.has_animation(anim_name):
 		sprite.play(anim_name)
 	else:
 		sprite.play("attack")
 	
-	# Update combo timing markers BEFORE entering the async block
 	last_attack_time = Time.get_ticks_msec() / 1000.0
-	
-	# --- DASH FINISHER MECHANIC INJECTION ---
-	if anim_name == "attack3":
-		# 1. Wait a tiny fraction of a second for the wind-up frames to display
-		await get_tree().create_timer(0.08).timeout
-		
-		# 2. Determine dash direction based on which way the sprite is currently facing
-		var dash_direction = Vector2.LEFT if sprite.flip_h else Vector2.RIGHT
-		
-		# 3. Apply a strong sudden velocity punch forward
-		var dash_force = 450.0  # Adjust this number higher or lower to change dash distance!
-		velocity = dash_direction * dash_force
-		move_and_slide()
-	# -----------------------------------------
 
-	# Progress string to the next step, loop back around to 1 if step 3 is finished
 	if combo_step >= 3:
 		combo_step = 1
 	else:
@@ -114,15 +117,46 @@ func attack() -> void:
 	if attack_hitbox_collision:
 		attack_hitbox_collision.set_deferred("disabled", false)
 		
-	# HALT right here and let the full sprite sheet frames play out completely!
+	await get_tree().create_timer(0.15).timeout
+	buffer_window_active = true 
 	await sprite.animation_finished
 	
 	if attack_hitbox_collision:
 		attack_hitbox_collision.set_deferred("disabled", true)
 		
 	is_attacking = false
+	if attack_buffered:
+		attack()
 
 
+func trigger_hit_stop(duration: float) -> void:
+	Engine.time_scale = 0.05 
+	await get_tree().create_timer(duration * 0.05).timeout
+	Engine.time_scale = 1.0 
+
+
+func trigger_camera_shake(intensity: float) -> void:
+	get_tree().call_group("camera", "apply_shake", intensity)
+
+
+func _on_player_hitbox_body_entered(body: Node2D) -> void:
+	if is_dead: return
+	if body.has_method("take_damage") and body != self:
+		var knockback_direction = (body.global_position - global_position).normalized()
+		var calculated_damage = attack_damage
+		var calculated_knockback_force = knockback_force
+		
+		if sprite.animation == "attack3":
+			calculated_damage = attack_damage * third_hit_multiplier
+			calculated_knockback_force = knockback_force * 1.8
+			trigger_hit_stop(0.12)
+			trigger_camera_shake(8.0)
+		else:
+			trigger_hit_stop(0.06)
+			trigger_camera_shake(3.0)
+		
+		var total_knockback = knockback_direction * calculated_knockback_force
+		body.take_damage(calculated_damage, total_knockback)
 
 
 func take_damage(amount: float) -> void:
@@ -131,9 +165,11 @@ func take_damage(amount: float) -> void:
 		
 	is_invincible = true
 	current_health -= amount
-	print("Player hit! Hearts remaining: ", current_health)
+	print("Player hit! Health remaining: ", current_health)
 	
-	sync_hud_ui()
+	# Visibly lower the green health bar value on impact damage
+	if has_node("PlayerHealthBar"):
+		health_bar.value = current_health
 	
 	if current_health <= 0:
 		die()
@@ -157,14 +193,14 @@ func play_hurt_iframe_loop() -> void:
 	is_invincible = false
 
 
-func sync_hud_ui() -> void:
-	get_tree().call_group("hud", "update_hearts", current_health, max_health)
-
-
 func die() -> void:
 	print("Player has died!")
 	is_dead = true
 	velocity = Vector2.ZERO
+	
+	# Hide the green bar immediately when you drop dead
+	if has_node("PlayerHealthBar"):
+		health_bar.visible = false
 	
 	$CollisionShape2D.set_deferred("disabled", true) if has_node("CollisionShape2D") else null
 	if has_node("Hurtbox/CollisionShape2D"):
@@ -186,11 +222,10 @@ func execute_fade_out_and_restart() -> void:
 	var fade_nodes = get_tree().get_nodes_in_group("fade_screen")
 	if fade_nodes.size() > 0:
 		var target_rect = fade_nodes[0] as ColorRect
-
 		var tween = create_tween()
 		tween.tween_property(target_rect, "modulate:a", 1.0, 1.0)
 		await tween.finished
-
+		
 	get_tree().reload_current_scene()
 
 
@@ -199,18 +234,12 @@ func execute_fade_in_effect() -> void:
 	if fade_nodes.size() > 0:
 		var target_rect = fade_nodes[0] as ColorRect
 		target_rect.modulate.a = 1.0
-		
 		var tween = create_tween()
 		tween.tween_property(target_rect, "modulate:a", 0.0, 1.0)
 
 
 func update_animation(direction: Vector2) -> void:
-	if is_dead: return
-
-	# ⚠️ MUST BE AT THE TOP: If we are swinging, completely freeze any movement animation updates
-	if is_attacking:
-		return 
-
+	if is_dead or is_attacking: return
 	if direction.x > 0:
 		sprite.flip_h = false
 		attack_pivot.scale.x = 1
@@ -222,25 +251,3 @@ func update_animation(direction: Vector2) -> void:
 		sprite.play("idle")
 	else:
 		sprite.play("walk")
-
-
-
-func _on_player_hitbox_body_entered(body: Node2D) -> void:
-	if is_dead: return
-	if body.has_method("take_damage") and body != self:
-		var knockback_direction = (body.global_position - global_position).normalized()
-		
-		# Define our base damage and knockback values
-		var calculated_damage = attack_damage
-		var calculated_knockback_force = knockback_force
-		
-		# NOTE: Because combo_step increments AT THE END of the attack() function,
-		# while an attack is actively running, step 1 is active_game_instance = 2, step 2 is 3, and step 3 loops to 1.
-		# Alternatively, we check what animation name is currently playing on the sprite!
-		if sprite.animation == "attack3":
-			calculated_damage = attack_damage * third_hit_multiplier
-			calculated_knockback_force = knockback_force * 1.5 # Optional: send them flying further!
-			print("CRITICAL COMBO FINISHER! Damage dealt: ", calculated_damage)
-		
-		var total_knockback = knockback_direction * calculated_knockback_force
-		body.take_damage(calculated_damage, total_knockback)

@@ -6,6 +6,8 @@ extends CharacterBody2D
 @export var attack_range: float = 32.0 
 @export var max_health: float = 100.0
 @export var speed: float = 60.0
+@onready var health_bar = $HealthBar
+
 
 @onready var sprite = $AnimatedSprite2D
 @onready var detection_area = $DetectionArea
@@ -26,6 +28,11 @@ var knockback_velocity: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	current_health = max_health
+
+	# Set up the health bar range dynamically on launch
+	if has_node("HealthBar"):
+		health_bar.max_value = max_health
+		health_bar.value = current_health
 	
 	hitbox_right_collision.disabled = true
 	hitbox_left_collision.disabled = true
@@ -115,20 +122,23 @@ func fire_weapon_swing() -> void:
 func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO) -> void:
 	if state == State.DEAD: return
 	current_health -= amount
-	print("Skeleton hit! Health remaining: ", current_health)
-	
+	print(name, " hit! Health remaining: ", current_health)
+
+	# Update the red progress bar visually
+	if has_node("HealthBar"):
+		health_bar.value = current_health
+
 	damage_window_active = false
-	
-	# FIXED: Assign the incoming parameter directly to our active movement vector!
 	knockback_velocity = knockback
-	
+
 	hitbox_right_collision.set_deferred("disabled", true)
 	hitbox_left_collision.set_deferred("disabled", true)
-	
+
 	if current_health <= 0:
 		die()
 	else:
 		play_hurt_effect()
+
 
 
 func play_hurt_effect() -> void:
@@ -141,6 +151,11 @@ func play_hurt_effect() -> void:
 func die() -> void:
 	state = State.DEAD
 	damage_window_active = false
+	
+	# Hide the health bar immediately upon entering the death state
+	if has_node("HealthBar"):
+		$HealthBar.visible = false
+		
 	hitbox_right_collision.set_deferred("disabled", true)
 	hitbox_left_collision.set_deferred("disabled", true)
 	$CollisionShape2D.set_deferred("disabled", true) if has_node("CollisionShape2D") else null
@@ -151,6 +166,7 @@ func die() -> void:
 		sprite.pause()
 	else:
 		queue_free()
+
 
 
 func _on_hitbox_right_area_entered(area: Area2D) -> void:

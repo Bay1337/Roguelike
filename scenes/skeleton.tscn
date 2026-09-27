@@ -243,6 +243,20 @@ radius = 16.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_5pgwy"]
 radius = 16.0
 
+[sub_resource type="Gradient" id="Gradient_xme4o"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ssl1b"]
+gradient = SubResource("Gradient_xme4o")
+width = 32
+height = 4
+
+[sub_resource type="Gradient" id="Gradient_duj3f"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_w4hcs"]
+gradient = SubResource("Gradient_duj3f")
+width = 32
+height = 4
+
 [node name="Skeleton" type="CharacterBody2D" unique_id=1886535496]
 collision_layer = 16
 script = ExtResource("1_ssl1b")
@@ -277,6 +291,18 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxLeft" unique_id=869469674]
 position = Vector2(-9, 0)
 shape = SubResource("CircleShape2D_5pgwy")
+
+[node name="HealthBar" type="TextureProgressBar" parent="." unique_id=1088022034]
+offset_left = -10.000001
+offset_top = -16.0
+offset_right = 30.0
+offset_bottom = 24.0
+scale = Vector2(0.7, 0.7)
+value = 100.0
+texture_under = SubResource("GradientTexture2D_ssl1b")
+texture_progress = SubResource("GradientTexture2D_w4hcs")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(1, 0, 0, 1)
 
 [connection signal="area_entered" from="HitboxRight" to="." method="_on_hitbox_right_area_entered"]
 [connection signal="area_entered" from="HitboxLeft" to="." method="_on_hitbox_left_area_entered"]
