@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b4vimpmksh6y8"]
 
 [ext_resource type="Script" uid="uid://b1brs4gj8mcr7" path="res://scripts/player.gd" id="1_3vyb7"]
-[ext_resource type="SpriteFrames" uid="uid://wisvqpmgxvbh" path="res://scenes/knight_frames.tres" id="2_qhqgy"]
+[ext_resource type="SpriteFrames" uid="uid://wisvqpmgxvbh" path="res://assets/tres files/knight_frames.tres" id="2_qhqgy"]
 [ext_resource type="PackedScene" uid="uid://c8ekopjhdehjc" path="res://scenes/ui.tscn" id="5_qlg0r"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k5ck4"]
@@ -16,6 +16,7 @@ radius = 8.0
 collision_layer = 8
 script = ExtResource("1_3vyb7")
 max_health = 10.0
+attack_damage = 50.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1906597328]
 position = Vector2(-1, -5)

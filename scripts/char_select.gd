@@ -7,6 +7,7 @@ extends Control
 	#
 	#
 @export var knight_frames: SpriteFrames = preload("res://assets/tres files/knight_frames.tres")
+@export var demoness_frames: SpriteFrames = preload("res://assets/tres files/demoness_frames.tres")
 
 @export var gameplay_scene_path: String = "res://scenes/test_room.tscn"
 
@@ -15,7 +16,7 @@ func _ready() -> void:
 		#
 		#
 	$HBoxContainer/KnightButton.pressed.connect(func(): _select_character(knight_frames))
-	
+	$HBoxContainer/DemonessButton.pressed.connect(func(): _select_character(demoness_frames))
 
 func _select_character(frames: SpriteFrames) -> void:
 	GlobalManager.selected_sprite_frames = frames
